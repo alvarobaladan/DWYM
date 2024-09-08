@@ -2,6 +2,7 @@ const addTaskButton = document.getElementById('addTaskBtn');
 const taskModal = document.getElementById('taskModal');
 const closeModalButton = document.querySelector('.modal-background');
 const cancelTaskButton = document.getElementById('cancelTaskBtn');
+const deleteTaskButton = document.getElementById('deleteTaskBtn');
 const taskForm = document.getElementById('taskForm');
 const toggleModeBtn = document.getElementById('toggleModeBtn');
 
@@ -28,7 +29,7 @@ async function getAllTasks() {
 }
 
 // Obtenemos la info de todas las tasks
-//getAllTasks();
+// getAllTasks();
 
 
 async function renderTasks() {
@@ -269,6 +270,36 @@ document.getElementById('saveTaskBtn').addEventListener('click', function (event
 
 
 // FIN ADD TASKS --------------------------------
+
+// Delete Tasks
+
+async function deleteTask(id) {
+    if(id !== null){
+        try{
+            const response = await fetch(serverURL + id, { method: 'DELETE'});
+    
+            // Check if the request was successful
+            if(!response.ok){
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+    
+            return response;
+        }catch (error){
+            console.error("Error fetching tasks:", error);
+        }
+    }
+}
+
+deleteTaskButton.addEventListener('click', function (event){
+    if(currentTaskId !== null){
+        deleteTask(currentTaskId);
+        closeModal();
+    }
+});
+    
+    
+
+// Fin Delete Tasks
 
 // Inicio DRAG AND DROP --------------------------------
 Object.keys(taskColumns).forEach(status => {

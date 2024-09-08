@@ -126,8 +126,7 @@ function openEditModal(taskId) {
     taskForm['taskDescription'].value = taskElement.querySelector('.description').textContent;
 
     const assignedText = taskElement.querySelector('.details p:first-child').textContent.split(': ')[1];
-    const assignedValue = Object.keys(userMap).find(key => userMap[key] === assignedText);
-    taskForm['taskAssigned'].value = assignedValue || assignedText;
+    taskForm['taskAssigned'].value = assignedText;
 
     taskForm['taskPriority'].value = taskElement.querySelector('.priority').textContent.split(': ')[1];
     taskForm['taskStatus'].value = taskElement.closest('.column').id;
@@ -242,14 +241,14 @@ document.getElementById('saveTaskBtn').addEventListener('click', function (event
 
         taskElement.querySelector('h3').textContent = title;
         taskElement.querySelector('.description').textContent = description;
-        taskElement.querySelector('.details p:first-child').innerHTML = `<i class="fa-solid fa-user"></i><strong>Asignado:</strong> ${userMap[assigned] || assigned}`;
+        taskElement.querySelector('.details p:first-child').innerHTML = `<i class="fa-solid fa-user"></i><strong>Asignado:</strong> ${assigned}`;
         taskElement.querySelector('.priority').innerHTML = `<i class="fa-solid fa-tag"></i><strong>Prioridad:</strong> ${priority}`;
         taskElement.querySelector('.priority').className = `priority ${priority.toLowerCase()}`;
         taskElement.querySelector('.deadline').innerHTML = `<i class="fa-solid fa-clock"></i><strong>Fecha límite:</strong> ${deadline}`;
 
         // Actualizar la imagen de perfil
         taskElement.querySelector('.profile-pic').src = profilePic;
-        taskElement.querySelector('.profile-pic').alt = userMap[assigned] || assigned;
+        taskElement.querySelector('.profile-pic').alt = assigned;
 
         taskElement.classList.remove('priority-low', 'priority-medium', 'priority-high');
         taskElement.classList.add(priorityClass);

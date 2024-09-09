@@ -33,8 +33,12 @@ async function getAllTasks() {
 
 
 async function renderTasks() {
-
     let taskArray = await getAllTasks();
+
+    // Delete current task from DOM
+    // for (let j = 0; j < taskArray.length; j++){
+    //     deleteFromDOM(taskArray[j].id);
+    // }
 
     for (let i = 0; i < taskArray.length; i++) {
 
@@ -48,29 +52,43 @@ async function renderTasks() {
         let deadline = task.endDate;
         let id = task.id;
 
-        let newTask = createTaskElement(title, description, assigned, priority, deadline, id);
+        if (document.querySelector("[data-id='${id}']")) {
+            continue;
+        } else {
 
-        // taskcolumn no existe en este contexto
+            // taskcolumn no existe en este contexto
 
-        let parsedStatus = "";
-        switch (status) {
-            case "Backlog": parsedStatus = "backlog";
-                break;
-            case "In Progress": parsedStatus = "in-progress";
-                break;
-            case "To Do": parsedStatus = "todo";
-                break;
-            case "Blocked": parsedStatus = "blocked";
-                break;
-            case "Done": parsedStatus = "done";
-                break;
-            default:
-                console.log("no status :(");
+            let parsedStatus = "";
+            switch (status.toLowerCase()) {
+                case "backlog":
+                    parsedStatus = "backlog";
+                    break;
+                case "in progress":
+                case "in-progress":
+                    parsedStatus = "in-progress";
+                    break;
+                case "to do":
+                case "todo":
+                    parsedStatus = "todo";
+                    break;
+                case "blocked":
+                    parsedStatus = "blocked";
+                    break;
+                case "done":
+                    parsedStatus = "done";
+                    break;
+                default:
+                    console.log("no status :(");
+            }
+
+            if (parsedStatus) {
+                let newTask = renderTaskElement(title, description, assigned, priority, deadline, status, id);
+                taskColumns[parsedStatus].appendChild(newTask);
+            }
         }
-
-        taskColumns[parsedStatus].appendChild(newTask);
-
     }
+
+
 
 }
 
@@ -153,7 +171,14 @@ let taskColumns = {
 
 let currentTaskId = null;
 
-function createTaskElement(title, description, assigned, priority, deadline, id = Date.now()) {
+function createTaskElement(title, description, assigned, priority, status, deadline, id = Date.now()) {
+    const taskElement = renderTaskElement(title, description, assigned, priority, status, deadline);
+    postTask(title, description, assigned, priority, status, deadline);
+
+    return taskElement;
+}
+
+function renderTaskElement(title, description, assigned, priority, deadline, id = Date.now()) {
     const taskElement = document.createElement('div');
     taskElement.classList.add('box', 'task');
 
@@ -214,6 +239,7 @@ function createTaskElement(title, description, assigned, priority, deadline, id 
 }
 
 
+
 document.getElementById('saveTaskBtn').addEventListener('click', function (event) {
     event.preventDefault();
 
@@ -260,7 +286,9 @@ document.getElementById('saveTaskBtn').addEventListener('click', function (event
 
         currentTaskId = null;
     } else {
-        const newTask = createTaskElement(title, description, assigned, priority, deadline);
+        const newTask = createTaskElement(title, description, assigned, priority, status, deadline);
+        console.log('New task:');
+        console.log(title, description, assigned, priority, deadline);
         taskColumns[status].appendChild(newTask);
     }
 
@@ -268,43 +296,69 @@ document.getElementById('saveTaskBtn').addEventListener('click', function (event
 });
 
 
-
 // FIN ADD TASKS --------------------------------
+
+// Create Tasks
+
+async function postTask(title, description, assigned, priority, status, deadline) {
+    let task = {
+        title: title,
+        description: description,
+        assigned: assigned,
+        priority: priority,
+        status: status,
+        deadline: deadline
+    };
+
+    try {
+        const response = await fetch(serverURL, { method: 'POST', headers: { "Content-Type": "application/json" }, body: JSON.stringify(task) });
+        console.log(response);
+        // Check if the request was successful
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return response;
+    } catch (error) {
+        console.error("Error fetching tasks:", error);
+    }
+}
 
 // Delete Tasks
 
 async function deleteTask(id) {
-    if(id !== null){
-        try{
-            const response = await fetch(serverURL + id, { method: 'DELETE'});
-    
+    if (id !== null) {
+        try {
+            const response = await fetch(serverURL + id, { method: 'DELETE' });
+
             // Check if the request was successful
-            if(!response.ok){
+            if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-    
+
             return response;
-        }catch (error){
+        } catch (error) {
             console.error("Error fetching tasks:", error);
         }
     }
 }
 
-deleteTaskButton.addEventListener('click', function (event){
-    if(currentTaskId !== null){
+deleteTaskButton.addEventListener('click', function (event) {
+    if (currentTaskId !== null) {
         deleteFromDOM(currentTaskId);
         deleteTask(currentTaskId);
         closeModal(currentTaskId);
     }
 });
 
-function deleteFromDOM(currentTaskId){
+function deleteFromDOM(currentTaskId) {
     let task = document.querySelector(`[data-id='${currentTaskId}']`);
-
-    task.remove();
-    
+    if (task !== null) {
+        console.log(task);
+        task.remove();
+    }
 }
-    
+
 
 // Fin Delete Tasks
 

@@ -292,11 +292,18 @@ async function deleteTask(id) {
 
 deleteTaskButton.addEventListener('click', function (event){
     if(currentTaskId !== null){
+        deleteFromDOM(currentTaskId);
         deleteTask(currentTaskId);
-        closeModal();
+        closeModal(currentTaskId);
     }
 });
+
+function deleteFromDOM(currentTaskId){
+    let task = document.querySelector(`[data-id='${currentTaskId}']`);
+
+    task.remove();
     
+}
     
 
 // Fin Delete Tasks

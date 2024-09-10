@@ -153,6 +153,30 @@ function openEditModal(taskId) {
     taskModal.classList.add('is-active');
 }
 
+async function putTask(title, description, assigned, priority, status, deadline, id) {
+    let task = {
+        title: title,
+        description: description,
+        assigned: assigned,
+        priority: priority,
+        status: status,
+        deadline: deadline
+    };
+
+    try {
+        const response = await fetch(serverURL + id, { method: 'PUT', headers: { "Content-Type": "application/json" }, body: JSON.stringify(task) });
+        console.log(response);
+        // Check if the request was successful
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return response;
+    } catch (error) {
+        console.error("Error fetching tasks:", error);
+    }
+}
+
 // Fin MODAL --------------------------------
 
 // Inicio ADD TASKS --------------------------------
@@ -278,6 +302,8 @@ document.getElementById('saveTaskBtn').addEventListener('click', function (event
         if (taskElement.closest('.column').id !== status) {
             taskColumns[status].appendChild(taskElement);
         }
+
+        putTask(title, description, assigned, priority, status, deadline, currentTaskId);
 
         currentTaskId = null;
     } else {

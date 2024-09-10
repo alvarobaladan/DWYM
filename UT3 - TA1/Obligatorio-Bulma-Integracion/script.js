@@ -157,7 +157,7 @@ async function putTask(title, description, assigned, priority, status, deadline,
     let task = {
         title: title,
         description: description,
-        assigned: assigned,
+        assignedTo: assigned,
         priority: priority,
         status: status,
         deadline: deadline
@@ -325,7 +325,7 @@ async function postTask(title, description, assigned, priority, status, deadline
     let task = {
         title: title,
         description: description,
-        assigned: assigned,
+        assignedTo: assigned,
         priority: priority,
         status: status,
         deadline: deadline

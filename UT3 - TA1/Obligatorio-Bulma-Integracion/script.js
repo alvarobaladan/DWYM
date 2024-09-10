@@ -35,11 +35,6 @@ async function getAllTasks() {
 async function renderTasks() {
     let taskArray = await getAllTasks();
 
-    // Delete current task from DOM
-    // for (let j = 0; j < taskArray.length; j++){
-    //     deleteFromDOM(taskArray[j].id);
-    // }
-
     for (let i = 0; i < taskArray.length; i++) {
 
         let task = taskArray[i];
@@ -178,7 +173,7 @@ function createTaskElement(title, description, assigned, priority, status, deadl
     return taskElement;
 }
 
-function renderTaskElement(title, description, assigned, priority, deadline, id = Date.now()) {
+function renderTaskElement(title, description, assigned, priority, status, deadline, id = Date.now()) {
     const taskElement = document.createElement('div');
     taskElement.classList.add('box', 'task');
 

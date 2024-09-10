@@ -6,6 +6,9 @@ const deleteTaskButton = document.getElementById('deleteTaskBtn');
 const taskForm = document.getElementById('taskForm');
 const toggleModeBtn = document.getElementById('toggleModeBtn');
 
+/* -------------------- */
+/* Llamadas al Servidor */
+/* -------------------- */
 const serverURL = "http://localhost:3000/api/tasks/";
 
 async function getAllTasks() {
@@ -28,10 +31,75 @@ async function getAllTasks() {
     }
 }
 
-// Obtenemos la info de todas las tasks
-// getAllTasks();
+async function postTask(title, description, assigned, priority, status, deadline) {
+    let task = {
+        title: title,
+        description: description,
+        assignedTo: assigned,
+        priority: priority,
+        status: status,
+        endDate: deadline
+    };
+
+    try {
+        const response = await fetch(serverURL, { method: 'POST', headers: { "Content-Type": "application/json" }, body: JSON.stringify(task) });
+        console.log(response);
+        // Check if the request was successful
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return response;
+    } catch (error) {
+        console.error("Error fetching tasks:", error);
+    }
+}
+
+async function putTask(title, description, assigned, priority, status, deadline, id) {
+    let task = {
+        title: title,
+        description: description,
+        assignedTo: assigned,
+        priority: priority,
+        status: status,
+        endDate: deadline
+    };
+
+    try {
+        const response = await fetch(serverURL + id, { method: 'PUT', headers: { "Content-Type": "application/json" }, body: JSON.stringify(task) });
+        console.log(response);
+        // Check if the request was successful
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return response;
+    } catch (error) {
+        console.error("Error fetching tasks:", error);
+    }
+}
+
+async function deleteTask(id) {
+    if (id !== null) {
+        try {
+            const response = await fetch(serverURL + id, { method: 'DELETE' });
+
+            // Check if the request was successful
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            return response;
+        } catch (error) {
+            console.error("Error fetching tasks:", error);
+        }
+    }
+}
 
 
+/* -------------------- */
+/* Render               */
+/* -------------------- */
 async function renderTasks() {
     let taskArray = await getAllTasks();
 
@@ -50,9 +118,6 @@ async function renderTasks() {
         if (document.querySelector("[data-id='${id}']")) {
             continue;
         } else {
-
-            // taskcolumn no existe en este contexto
-
             let parsedStatus = "";
             switch (status.toLowerCase()) {
                 case "backlog":
@@ -77,7 +142,7 @@ async function renderTasks() {
             }
 
             if (parsedStatus) {
-                let newTask = renderTaskElement(title, description, assigned, priority, deadline, status, id);
+                let newTask = renderTaskElement(title, description, assigned, priority, status, deadline, id);
                 taskColumns[parsedStatus].appendChild(newTask);
             }
         }
@@ -85,116 +150,6 @@ async function renderTasks() {
 
 
 
-}
-
-renderTasks();
-
-// Dark/Light Mode
-toggleModeBtn.addEventListener('click', toggleMode);
-function toggleMode() {
-    let currentMode = document.documentElement.getAttribute('data-theme');
-
-    if (currentMode === 'light') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-    } else {
-        document.documentElement.setAttribute('data-theme', 'light');
-    }
-}
-
-// Change Background
-backgroundSelector.addEventListener('change', changeBackground);
-function changeBackground() {
-    let selectedBackground = document.getElementById("backgroundSelector").value;
-
-    if (selectedBackground === "Default") {
-        document.getElementById("columnsContainer").style.backgroundImage = "";
-    } else {
-        document.getElementById("columnsContainer").style.backgroundImage = "url('" + selectedBackground + "')";
-    }
-}
-
-// Inicio MODAL --------------------------------
-
-function openModal() {
-    taskModal.classList.add('is-active');
-    taskForm.reset();  // Limpiar el formulario cuando se abre el modal
-}
-
-function closeModal() {
-    taskModal.classList.remove('is-active');
-    taskForm.reset();  // Limpiar el formulario cuando se cierra el modal
-    document.querySelector('.modal-card-title').textContent = 'Tarea'; // Resetear el título
-    currentTaskId = null; // Resetear el ID para nuevas tareas
-}
-
-addTaskButton.addEventListener('click', openModal);
-closeModalButton.addEventListener('click', closeModal);
-cancelTaskButton.addEventListener('click', closeModal);
-
-function openEditModal(taskId) {
-    currentTaskId = taskId; // Almacena el ID de la tarea que se está editando
-    const taskElement = document.querySelector(`[data-id='${taskId}']`);
-
-    // Cargar la información de la tarea en los campos del formulario
-    taskForm['taskTitle'].value = taskElement.querySelector('h3').textContent;
-    taskForm['taskDescription'].value = taskElement.querySelector('.description').textContent;
-
-    const assignedText = taskElement.querySelector('.details p:first-child').textContent.split(': ')[1];
-    taskForm['taskAssigned'].value = assignedText;
-
-    taskForm['taskPriority'].value = taskElement.querySelector('.priority').textContent.split(': ')[1];
-    taskForm['taskStatus'].value = taskElement.closest('.column').id;
-    taskForm['taskDeadline'].value = taskElement.querySelector('.deadline').textContent.split(': ')[1];
-
-    // Cambiar el título del modal para indicar que es una edición
-    document.querySelector('.modal-card-title').textContent = 'Editar Tarea';
-
-    // Abrir el modal
-    taskModal.classList.add('is-active');
-}
-
-async function putTask(title, description, assigned, priority, status, deadline, id) {
-    let task = {
-        title: title,
-        description: description,
-        assignedTo: assigned,
-        priority: priority,
-        status: status,
-        deadline: deadline
-    };
-
-    try {
-        const response = await fetch(serverURL + id, { method: 'PUT', headers: { "Content-Type": "application/json" }, body: JSON.stringify(task) });
-        console.log(response);
-        // Check if the request was successful
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        return response;
-    } catch (error) {
-        console.error("Error fetching tasks:", error);
-    }
-}
-
-// Fin MODAL --------------------------------
-
-// Inicio ADD TASKS --------------------------------
-let taskColumns = {
-    backlog: document.getElementById('backlog').querySelector('.tasks'),
-    todo: document.getElementById('todo').querySelector('.tasks'),
-    'in-progress': document.getElementById('in-progress').querySelector('.tasks'),
-    blocked: document.getElementById('blocked').querySelector('.tasks'),
-    done: document.getElementById('done').querySelector('.tasks')
-};
-
-let currentTaskId = null;
-
-function createTaskElement(title, description, assigned, priority, status, deadline, id = Date.now()) {
-    const taskElement = renderTaskElement(title, description, assigned, priority, status, deadline);
-    postTask(title, description, assigned, priority, status, deadline);
-
-    return taskElement;
 }
 
 function renderTaskElement(title, description, assigned, priority, status, deadline, id = Date.now()) {
@@ -257,7 +212,68 @@ function renderTaskElement(title, description, assigned, priority, status, deadl
     return taskElement;
 }
 
+renderTasks();
 
+
+/* -------------------- */
+/* Modal                */
+/* -------------------- */
+function openModal() {
+    taskModal.classList.add('is-active');
+    taskForm.reset();  // Limpiar el formulario cuando se abre el modal
+}
+
+function closeModal() {
+    taskModal.classList.remove('is-active');
+    taskForm.reset();  // Limpiar el formulario cuando se cierra el modal
+    document.querySelector('.modal-card-title').textContent = 'Tarea'; // Resetear el título
+    currentTaskId = null; // Resetear el ID para nuevas tareas
+}
+
+function openEditModal(taskId) {
+    currentTaskId = taskId; // Almacena el ID de la tarea que se está editando
+    const taskElement = document.querySelector(`[data-id='${taskId}']`);
+
+    // Cargar la información de la tarea en los campos del formulario
+    taskForm['taskTitle'].value = taskElement.querySelector('h3').textContent;
+    taskForm['taskDescription'].value = taskElement.querySelector('.description').textContent;
+
+    const assignedText = taskElement.querySelector('.details p:first-child').textContent.split(': ')[1];
+    taskForm['taskAssigned'].value = assignedText;
+
+    taskForm['taskPriority'].value = taskElement.querySelector('.priority').textContent.split(': ')[1];
+    taskForm['taskStatus'].value = taskElement.closest('.column').id;
+    taskForm['taskDeadline'].value = taskElement.querySelector('.deadline').textContent.split(': ')[1];
+
+    // Cambiar el título del modal para indicar que es una edición
+    document.querySelector('.modal-card-title').textContent = 'Editar Tarea';
+
+    // Abrir el modal
+    taskModal.classList.add('is-active');
+}
+
+addTaskButton.addEventListener('click', openModal);
+closeModalButton.addEventListener('click', closeModal);
+cancelTaskButton.addEventListener('click', closeModal);
+
+
+// Agregar/Modificar tareas
+let taskColumns = {
+    backlog: document.getElementById('backlog').querySelector('.tasks'),
+    todo: document.getElementById('todo').querySelector('.tasks'),
+    'in-progress': document.getElementById('in-progress').querySelector('.tasks'),
+    blocked: document.getElementById('blocked').querySelector('.tasks'),
+    done: document.getElementById('done').querySelector('.tasks')
+};
+
+let currentTaskId = null;
+
+function createTaskElement(title, description, assigned, priority, status, deadline, id = Date.now()) {
+    const taskElement = renderTaskElement(title, description, assigned, priority, status, deadline);
+    postTask(title, description, assigned, priority, status, deadline);
+
+    return taskElement;
+}
 
 document.getElementById('saveTaskBtn').addEventListener('click', function (event) {
     event.preventDefault();
@@ -316,54 +332,7 @@ document.getElementById('saveTaskBtn').addEventListener('click', function (event
     closeModal();
 });
 
-
-// FIN ADD TASKS --------------------------------
-
-// Create Tasks
-
-async function postTask(title, description, assigned, priority, status, deadline) {
-    let task = {
-        title: title,
-        description: description,
-        assignedTo: assigned,
-        priority: priority,
-        status: status,
-        deadline: deadline
-    };
-
-    try {
-        const response = await fetch(serverURL, { method: 'POST', headers: { "Content-Type": "application/json" }, body: JSON.stringify(task) });
-        console.log(response);
-        // Check if the request was successful
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        return response;
-    } catch (error) {
-        console.error("Error fetching tasks:", error);
-    }
-}
-
-// Delete Tasks
-
-async function deleteTask(id) {
-    if (id !== null) {
-        try {
-            const response = await fetch(serverURL + id, { method: 'DELETE' });
-
-            // Check if the request was successful
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            return response;
-        } catch (error) {
-            console.error("Error fetching tasks:", error);
-        }
-    }
-}
-
+// Eliminar tareas
 deleteTaskButton.addEventListener('click', function (event) {
     if (currentTaskId !== null) {
         deleteFromDOM(currentTaskId);
@@ -380,10 +349,7 @@ function deleteFromDOM(currentTaskId) {
     }
 }
 
-
-// Fin Delete Tasks
-
-// Inicio DRAG AND DROP --------------------------------
+// Drag and Drop
 Object.keys(taskColumns).forEach(status => {
     const column = taskColumns[status];
 
@@ -400,4 +366,27 @@ Object.keys(taskColumns).forEach(status => {
         column.appendChild(taskElement);
     });
 });
-// Fin DRAG AND DROP --------------------------------
+
+// Dark/Light Mode
+toggleModeBtn.addEventListener('click', toggleMode);
+function toggleMode() {
+    let currentMode = document.documentElement.getAttribute('data-theme');
+
+    if (currentMode === 'light') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+    }
+}
+
+// Change Background
+backgroundSelector.addEventListener('change', changeBackground);
+function changeBackground() {
+    let selectedBackground = document.getElementById("backgroundSelector").value;
+
+    if (selectedBackground === "Default") {
+        document.getElementById("columnsContainer").style.backgroundImage = "";
+    } else {
+        document.getElementById("columnsContainer").style.backgroundImage = "url('" + selectedBackground + "')";
+    }
+}

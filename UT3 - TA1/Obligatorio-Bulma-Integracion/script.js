@@ -241,9 +241,9 @@ function openEditModal(taskId) {
     const assignedText = taskElement.querySelector('.details p:first-child').textContent.split(': ')[1];
     taskForm['taskAssigned'].value = assignedText;
 
-    taskForm['taskPriority'].value = taskElement.querySelector('.priority').textContent.split(': ')[1];
+    taskForm['taskPriority'].value = taskElement.querySelector('.priority').textContent.split(': ')[1].trim();
     taskForm['taskStatus'].value = taskElement.closest('.column').id;
-    taskForm['taskDeadline'].value = taskElement.querySelector('.deadline').textContent.split(': ')[1];
+    taskForm['taskDeadline'].value = taskElement.querySelector('.deadline').textContent.split(': ')[1].trim();
 
     // Cambiar el título del modal para indicar que es una edición
     document.querySelector('.modal-card-title').textContent = 'Editar Tarea';

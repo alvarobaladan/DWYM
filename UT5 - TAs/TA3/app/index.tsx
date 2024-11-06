@@ -35,14 +35,15 @@ export default function Index() {
   const [taskTitle, setTaskTitle] = useState('');
   const [tasks, setTasks] = useState<string[]>([]);
 
+
   function handleAdd() {
     setTasks([...tasks, taskTitle]);
     setTaskTitle('');
   }
 
-  // function handleDelete(indexToRemove: number){
-  //     setTasks(tasks.filter((_, index) => index !== indexToRemove));
-  // }
+  function handleDelete(indexToDelete: number){
+      setTasks(tasks.filter((_, index) => index !== indexToDelete));
+  }
 
   return (
     <SafeAreaView>
@@ -54,10 +55,11 @@ export default function Index() {
 
         <FlatList
           data={tasks}
-          renderItem={({ item }) =>
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item, index }) =>
             <View>
               <Text>{item}</Text>
-              <Button title='Eliminar'></Button>
+              <Button title='Eliminar' onPress={() => handleDelete(index)}></Button>
             </View>
           }>
         </FlatList>

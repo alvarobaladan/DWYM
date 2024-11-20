@@ -1,13 +1,14 @@
 import { Text, TextInput, View, SafeAreaView, StyleSheet, Button, FlatList, TouchableOpacity, Image, Dimensions } from "react-native";
 import { useState } from 'react';
 import { useNavigation } from "expo-router";
+import { API_BASE_URL } from "./Constants";
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const deletePlanet = async (id: string) => {
     console.log("Entro deletePlanet");
-    const response = await fetch(`http://192.168.1.9:8000/planets` + "/" + id, { method: 'DELETE' });
+    const response = await fetch(`${API_BASE_URL}` + "/" + id, { method: 'DELETE' });
 
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

@@ -1,13 +1,14 @@
 import { Text, TextInput, View, SafeAreaView, StyleSheet, Button, FlatList, TouchableOpacity, Image, Dimensions } from "react-native";
 import { useEffect, useState } from 'react';
 import { useNavigation } from "expo-router";
+import { API_BASE_URL } from "./Constants";
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const getPlanetById = async (id: string) => {
     console.log("Entro getPlanetById");
-    const response = await fetch(`http://192.168.1.9:8000/planets` + "/" + id, { method: 'GET' });
+    const response = await fetch(`${API_BASE_URL}/${id}`, { method: 'GET' });
 
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -36,11 +37,11 @@ export default function CardDetails({ id }: { id: string }) {
             {planet &&
                 <View style={styles.card_container}>
                     <Image source={{ uri: planet.image }} style={styles.image} />
-                    <View>
-                        <Text numberOfLines={ 1 } style={{ fontSize: 20 }}>{planet.name}</Text>
-                        <Text style={{ fontSize: 12 }} numberOfLines={5}>{planet.description}</Text>
-                        <Text style={{ fontSize: 12 }}>{planet.moons}</Text>
-                        <Text style={{ fontSize: 12 }}>{planet.moon_names}</Text>
+                    <View style={{ margin: 5}}>
+                        <Text style={{ fontSize: 20 }}>{planet.name}</Text>
+                        <Text style={{ fontSize: 12 }}>{planet.description}</Text>
+                        <Text style={{ fontSize: 12 }}>Lunas: {planet.moons}</Text>
+                        <Text style={{ fontSize: 12 }}>Nombre de Lunas: {planet.moon_names}</Text>
                     </View>
                 </View>
             }

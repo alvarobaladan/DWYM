@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { StyleSheet, TextInput, SafeAreaView, Text, View, TouchableOpacity } from "react-native";
+import { API_BASE_URL } from "@/components/Constants";
 
 // API: Llamada al servidor POST
 const postPlanet = async (dataJSON: any) => {
   console.log("Entro postPlanet");
-  const response = await fetch(`http://192.168.1.9:8000/planets`, {
+  const response = await fetch(`${API_BASE_URL}`, {
     method: 'POST', headers: {
       "Content-Type": "application/json"
     }, body: JSON.stringify(dataJSON)
@@ -39,8 +40,8 @@ export default function Index() {
   }
 
   return (
-    <SafeAreaView>
-      <Text style={{fontSize: 20}}>Agregar un nuevo planeta</Text>
+    <View>
+      <Text style={{fontSize: 20, alignSelf:'center'}}>Agregar un nuevo planeta</Text>
 
       <View style={{ flex: 1 }}>
         <Text>Nombre</Text>
@@ -86,7 +87,7 @@ export default function Index() {
           <Text>Agregar</Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -109,7 +110,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     minHeight: 50,
     minWidth: 300,
-    maxWidth: 800,
   },
   
 

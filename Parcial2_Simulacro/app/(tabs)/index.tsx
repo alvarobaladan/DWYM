@@ -2,12 +2,13 @@ import Card from "@/components/card";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Text, View, FlatList } from "react-native";
+import { API_BASE_URL } from "@/components/Constants";
 
 
 const fetchPlanets = async () => {
   try {
     console.log('Entro fetch');
-    const response = await axios.get(`http://192.168.1.9:8000/planets`, {
+    const response = await axios.get(`${API_BASE_URL}`, {
       headers: {}
     });
     return response.data;

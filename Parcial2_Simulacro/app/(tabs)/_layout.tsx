@@ -1,7 +1,7 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { Platform } from 'react-native';
-import { StyleSheet, TextInput, SafeAreaView, Text, View, TouchableOpacity } from "react-native";
+import { Image, StyleSheet, TextInput, SafeAreaView, Text, View, TouchableOpacity } from "react-native";
 
 export default function TabLayout() {
   
@@ -22,21 +22,21 @@ export default function TabLayout() {
           name="index"
           options={{
             title: 'Home',
-            //tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+            tabBarIcon: () => <Image source={require('@/assets/images/home.png')} style={{ width: 24, height: 24 }} />,
           }}
         />
         <Tabs.Screen
           name="details"
           options={{
             title: 'Detalles',
-            //tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+            tabBarIcon: () => <Image source={require('@/assets/images/details.png')} style={{ width: 24, height: 24 }} />,
           }}
         />
         <Tabs.Screen
           name="add"
           options={{
             title: 'Agregar',
-            //tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+            tabBarIcon: () => <Image source={require('@/assets/images/add.png')} style={{ width: 24, height: 24 }} />,
           }}
         />
       </Tabs>

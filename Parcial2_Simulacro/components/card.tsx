@@ -1,13 +1,38 @@
-import { Text, TextInput, View, SafeAreaView, StyleSheet, Button, FlatList, TouchableOpacity, Image } from "react-native";
+import { Text, TextInput, View, SafeAreaView, StyleSheet, Button, FlatList, TouchableOpacity, Image, Dimensions } from "react-native";
 import { useState } from 'react';
+import { useNavigation } from "expo-router";
 
-export default function Card({ name, image }: { name: string, image: string }) {
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+
+const deletePlanet = async (id: string) => {
+    console.log("Entro deletePlanet");
+    const response = await fetch(`http://192.168.1.9:8000/planets` + "/" + id, { method: 'DELETE' });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    return await response.json();
+}
+
+export default function Card({ id, name, image }: { id: string, name: string, image: string }) {
+    const navigation = useNavigation();
+
+    function handleDelete(){
+        deletePlanet(id);
+    }
+    
     return (
         <View>
+            {/* <TouchableOpacity onPress={() => navigation.navigate('details', { id })}> */}
             <TouchableOpacity>
                 <View style={styles.card_container}>
                     <Image source={{ uri: image }} style={styles.image} />
                     <Text style={styles.title}>{name}</Text>
+                    <TouchableOpacity style={styles.button} onPress={handleDelete}>
+                        <Text>Eliminar</Text>
+                    </TouchableOpacity>
                 </View>
             </TouchableOpacity>
         </View>
@@ -20,14 +45,15 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         margin: 5,
         boxSizing: 'border-box',
-        width: 300,
+        width: windowWidth * 0.85,
         height: 115,
         backgroundColor: 'rgba(217, 217, 217, 0.58)',
-        borderColor: 'grey',
+        borderColor: 'black',
         borderWidth: 2,
         borderBlockColor: 'solid white',
-        boxShadow: '12px 17px 51px rgba(0, 0, 0, 0.22)',
+        boxShadow: '5px 5px 3px rgba(0, 0, 0, 0.22)',
         borderRadius: 17,
+        //backgroundImage: 'linear-gradient(to right, #051937, #444964, #808195, #bfbec8, #ffffff);',
     },
 
     title: {
@@ -47,4 +73,24 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderRadius: 17,
     },
+
+    button:{
+        width:100,
+        height:40,
+        margin:5,
+        alignSelf:'flex-end',
+
+        backgroundColor: '#FAFBFC',
+        borderColor: 'black', //rgba(27, 31, 35, 0.15)
+        borderWidth: 1,
+        borderRadius: 6,
+        paddingVertical: 6,
+        paddingHorizontal: 16,
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: '#1B1F23',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.04,
+        shadowRadius: 0,
+    }
 });

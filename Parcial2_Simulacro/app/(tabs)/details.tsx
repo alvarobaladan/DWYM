@@ -1,3 +1,4 @@
+import CardDetails from "@/components/cardDetails";
 import { SafeAreaView, Text, View } from "react-native";
 
 export default function Details() {
@@ -10,7 +11,8 @@ export default function Details() {
           alignItems: "center",
         }}
       >
-        <Text>Esta es la pagina de detalles</Text>
+        <Text style={{fontSize: 20}}>Detalles del Planeta</Text>
+        <CardDetails id="3" />
       </View>
     </SafeAreaView>
   );

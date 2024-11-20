@@ -4,7 +4,7 @@ import { StyleSheet, TextInput, SafeAreaView, Text, View, TouchableOpacity } fro
 // API: Llamada al servidor POST
 const postPlanet = async (dataJSON: any) => {
   console.log("Entro postPlanet");
-  const response = await fetch(`http://localhost:8000/planets`, {
+  const response = await fetch(`http://192.168.1.9:8000/planets`, {
     method: 'POST', headers: {
       "Content-Type": "application/json"
     }, body: JSON.stringify(dataJSON)
@@ -40,9 +40,9 @@ export default function Index() {
 
   return (
     <SafeAreaView>
-      <Text>Este es la pagina de Add</Text>
-      <View style={{ flex: 1 }}>
+      <Text style={{fontSize: 20}}>Agregar un nuevo planeta</Text>
 
+      <View style={{ flex: 1 }}>
         <Text>Nombre</Text>
         <TextInput
           style={styles.textInput}
@@ -111,15 +111,25 @@ const styles = StyleSheet.create({
     minWidth: 300,
     maxWidth: 800,
   },
+  
 
   button: {
-    margin: 10,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderRadius: 5,
-    borderColor: 'black',
-    height: 50,
-    width: 200,
+    width:100,
+    height:40,
+    margin:5,
     alignSelf: 'center',
+    
+    backgroundColor: '#FAFBFC',
+    borderColor: 'black', //rgba(27, 31, 35, 0.15)
+    borderWidth: 1,
+    borderRadius: 6,
+    paddingVertical: 6,
+    paddingHorizontal: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#1B1F23',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
+    shadowRadius: 0,
   },
 })

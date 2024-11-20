@@ -121,68 +121,12 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/5/56/Neptune_Full.jpg"
     },
     {
-      "id": "78b3",
-      "name": "Ejemplo de planeta",
-      "description": "description",
-      "moons": "1",
-      "moons_names": "moons_names",
-      "image": "image"
-    },
-    {
-      "id": "7350",
-      "name": "Ejemplo de planeta",
-      "description": "description",
-      "moons": "1",
-      "moons_names": "moons_names",
-      "image": "image"
-    },
-    {
-      "id": "78ee",
-      "name": "Ejemplo de planeta",
-      "description": "description",
-      "moons": "1",
-      "moons_names": "moons_names",
-      "image": "image"
-    },
-    {
-      "id": "c4d7",
-      "name": "Nuevo Planeta",
-      "description": "Esta es la descripcion",
-      "moons": "5",
-      "moons_names": "Esto, es, nombre, luna",
-      "image": "https://lh3.googleusercontent.com/proxy/eacR852zracNTpkKcyzAAmIzxJ-5vz8OFmEpU3vBw3TrTCNry0oBJEgWGPdhAqkNIwg1apSf0EBx7WyNPVt4XMCeVmQFbzKHw09jlbV0h_wVByz6Yb555PMbuW7pJ185Wt6qFSbnky1xXDqpHkJn0PY02vryt8V3Zy435P3JCMwrZ8CfRSC7mndSOosq7QYFRc04OPAX3928Vf9Cqia4cD1syrsoxTWMIyr_ASiA_48Lnm4JyRPW86F5k18BSmk=s2560-w2560-h1440-fcrop64=1,00001999fffff3c7-k-no-nd-mv"
-    },
-    {
-      "id": "3f06",
-      "name": "Nuevo Planeta 2",
-      "description": "Esta es la descripcion",
-      "moons": "5",
-      "moons_names": "Esto, es, nombre, luna",
-      "image": ""
-    },
-    {
-      "id": "9d07",
-      "name": "",
-      "description": "",
+      "id": "dd3b",
+      "name": "Planeta",
+      "description": "Desc",
       "moons": "",
       "moons_names": "",
       "image": ""
-    },
-    {
-      "id": "b7d6",
-      "name": "Planeta",
-      "description": "Desc",
-      "moons": "Lunas",
-      "moons_names": "lun",
-      "image": "url"
-    },
-    {
-      "id": "1ceb",
-      "name": "Ejemplo de planetaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      "description": "Desc",
-      "moons": "luna",
-      "moons_names": "lun",
-      "image": "URL"
     }
   ]
 }

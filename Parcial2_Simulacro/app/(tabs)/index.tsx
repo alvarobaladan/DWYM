@@ -7,7 +7,7 @@ import { Text, View, FlatList } from "react-native";
 const fetchPlanets = async () => {
   try {
     console.log('Entro fetch');
-    const response = await axios.get(`http://localhost:8000/planets`, {
+    const response = await axios.get(`http://192.168.1.9:8000/planets`, {
       headers: {}
     });
     return response.data;
@@ -30,11 +30,11 @@ export default function Index() {
 
   return (
     <View style={{flex: 1, alignItems:'center'}}>
-      <Text>Este es el Home</Text>
+      <Text style={{fontSize: 20}}>Lista de Planetas</Text>
       <FlatList
         data={planets}
         renderItem={({ item }) => (
-          <Card name={item.name} image={item.image}></Card>
+          <Card id={item.id} name={item.name} image={item.image}></Card>
         )}
         keyExtractor={(item, index) => index.toString()}
       />

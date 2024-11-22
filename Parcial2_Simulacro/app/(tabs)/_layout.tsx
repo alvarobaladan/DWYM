@@ -26,13 +26,6 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-          name="details"
-          options={{
-            title: 'Detalles',
-            tabBarIcon: () => <Image source={require('@/assets/images/details.png')} style={{ width: 24, height: 24 }} />,
-          }}
-        />
-        <Tabs.Screen
           name="add"
           options={{
             title: 'Agregar',

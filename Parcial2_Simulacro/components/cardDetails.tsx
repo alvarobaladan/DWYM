@@ -2,25 +2,38 @@ import { Text, TextInput, View, SafeAreaView, StyleSheet, Button, FlatList, Touc
 import { useEffect, useState } from 'react';
 import { useNavigation } from "expo-router";
 import { API_BASE_URL } from "./Constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const getPlanetById = async (id: string) => {
-    console.log("Entro getPlanetById");
     const response = await fetch(`${API_BASE_URL}/${id}`, { method: 'GET' });
 
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    console.log(response);
-
     return await response.json();
 }
 
-export default function CardDetails({ id }: { id: string }) {
+export default function CardDetails() {
     const navigation = useNavigation();
+
+    const [id, setId] = useState<any>('');
+    useEffect(() => {
+      const handleGetData = async () => {
+        console.log('Entro HandleGetData');
+        var idAsync = await AsyncStorage.getItem('currentPlanetID');
+        console.log(idAsync);
+        setId(idAsync);
+        console.log('Actualizo Details');
+      }
+      handleGetData();
+    });
+
+    console.log('Entro CardDetails');
+    console.log(id);
 
     const [planet, setPlanet] = useState<any>([]);
 
@@ -30,7 +43,7 @@ export default function CardDetails({ id }: { id: string }) {
             setPlanet(data);
         };
         getPlanet();
-    }, []);
+    }, [id]);
 
     return (
         <View>

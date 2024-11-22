@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { StyleSheet, TextInput, SafeAreaView, Text, View, TouchableOpacity } from "react-native";
 import { API_BASE_URL } from "@/components/Constants";
+import { router } from "expo-router";
 
 // API: Llamada al servidor POST
 const postPlanet = async (dataJSON: any) => {
@@ -37,6 +38,7 @@ export default function Index() {
     postPlanet(newPlanet);
 
     console.log('Se agrego un nuevo planeta');
+    router.navigate(`/`);
   }
 
   return (

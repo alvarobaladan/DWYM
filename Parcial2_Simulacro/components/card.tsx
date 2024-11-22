@@ -1,7 +1,8 @@
 import { Text, TextInput, View, SafeAreaView, StyleSheet, Button, FlatList, TouchableOpacity, Image, Dimensions } from "react-native";
 import { useState } from 'react';
-import { useNavigation } from "expo-router";
+import { router } from "expo-router";
 import { API_BASE_URL } from "./Constants";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -18,16 +19,23 @@ const deletePlanet = async (id: string) => {
 }
 
 export default function Card({ id, name, image }: { id: string, name: string, image: string }) {
-    const navigation = useNavigation();
 
     function handleDelete(){
         deletePlanet(id);
     }
     
+    const navigateToDeatils = async ()  => {
+        await AsyncStorage.setItem('currentPlanetID', id);
+        var idAsync = await AsyncStorage.getItem('currentPlanetID');
+        console.log(idAsync);
+        console.log('Entro navigate');
+        router.navigate(`/details`);
+    }
+
     return (
         <View>
             {/* <TouchableOpacity onPress={() => navigation.navigate('details', { id })}> */}
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigateToDeatils()}>
                 <View style={styles.card_container}>
                     <Image source={{ uri: image }} style={styles.image} />
                     <Text style={styles.title}>{name}</Text>

@@ -4,13 +4,12 @@ import { useEffect, useState } from "react";
 import { Text, View, FlatList } from "react-native";
 import { API_BASE_URL } from "@/components/Constants";
 
-
 const fetchPlanets = async () => {
   try {
-    console.log('Entro fetch');
     const response = await axios.get(`${API_BASE_URL}`, {
       headers: {}
     });
+
     return response.data;
   } catch (error) {
     console.log(error);
@@ -27,7 +26,7 @@ export default function Index() {
       setPlanets(data);
     };
     getPlanets();
-  }, []);
+  });
 
   return (
     <View style={{flex: 1, alignItems:'center'}}>

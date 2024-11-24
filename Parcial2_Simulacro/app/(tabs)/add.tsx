@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { StyleSheet, TextInput, SafeAreaView, Text, View, TouchableOpacity } from "react-native";
+import { TextInput, Text, View, TouchableOpacity } from "react-native";
 import { API_BASE_URL } from "@/components/Constants";
 import { router } from "expo-router";
+import styles from "@/components/styles";
 
-// API: Llamada al servidor POST
+// API: POST
 const postPlanet = async (dataJSON: any) => {
   console.log("Entro postPlanet");
   const response = await fetch(`${API_BASE_URL}`, {
@@ -36,6 +37,13 @@ export default function Index() {
     }
 
     postPlanet(newPlanet);
+
+    // Limpiar inputs
+    setName('');
+    setDescription('');
+    setMoons('');
+    setMoon_Names('');
+    setImage('');
 
     console.log('Se agrego un nuevo planeta');
     router.navigate(`/`);
@@ -92,46 +100,3 @@ export default function Index() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    margin: 5,
-  },
-
-  title: {
-    fontSize: 20,
-  },
-
-  textInput: {
-    margin: 5,
-    textAlign: 'center',
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: 'grey',
-    borderRadius: 5,
-    minHeight: 50,
-    minWidth: 300,
-  },
-  
-
-  button: {
-    width:100,
-    height:40,
-    margin:5,
-    alignSelf: 'center',
-    
-    backgroundColor: '#FAFBFC',
-    borderColor: 'black', //rgba(27, 31, 35, 0.15)
-    borderWidth: 1,
-    borderRadius: 6,
-    paddingVertical: 6,
-    paddingHorizontal: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#1B1F23',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.04,
-    shadowRadius: 0,
-  },
-})

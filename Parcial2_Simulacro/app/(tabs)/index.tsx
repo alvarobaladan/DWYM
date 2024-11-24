@@ -1,9 +1,13 @@
-import Card from "@/components/card";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Text, View, FlatList } from "react-native";
 import { API_BASE_URL } from "@/components/Constants";
+import axios from "axios";
+import Card from "@/components/card";
 
+// Solo para referencia
+// import { Text, TextInput, View, SafeAreaView, StyleSheet, Button, FlatList, TouchableOpacity, Image, Dimensions } from "react-native";
+
+// API: GET ALL (FETCH)
 const fetchPlanets = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}`, {

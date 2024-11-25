@@ -40,10 +40,12 @@ export default function Card({ id, name, image }: { id: string, name: string, im
                 <View style={{ ...styles.card_container, height: 115 }}>
                     <Image source={{ uri: image }} style={styles.image} />
                     <Text style={{ fontSize: 20, flex:1 }}>{name}</Text>
+
                     <View style={{alignSelf:'flex-end'}}>
                         <TouchableOpacity style={styles.button} onPress={navigateToDeatilsAndEdit}>
                             <Text>Editar</Text>
                         </TouchableOpacity>
+
                         <TouchableOpacity style={styles.button} onPress={handleDelete}>
                             <Text>Eliminar</Text>
                         </TouchableOpacity>

@@ -19,9 +19,11 @@ const getPlanetById = async (id: string) => {
 
 // API: PUT BY ID
 const putPlanetById = async (id: string, dataJSON: any) => {
-    const response = await fetch(`${API_BASE_URL}/${id}`, { method: 'PUT', 
-        headers: {"Content-Type": "application/json"}, 
-        body: JSON.stringify(dataJSON)});
+    const response = await fetch(`${API_BASE_URL}/${id}`, {
+        method: 'PUT',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dataJSON)
+    });
 
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -45,13 +47,10 @@ export default function CardDetails() {
     // Obtener información de ID y de modo (Edit o View)
     useEffect(() => {
         const handleGetData = async () => {
-            console.log('Entro HandleGetData');
             var idAsync = await AsyncStorage.getItem('currentPlanetID');
             var isEdit = await AsyncStorage.getItem('isEdit');
             isEdit === 'true' ? setIsEdit(true) : setIsEdit(false);
-            console.log(idAsync);
             setId(idAsync);
-            console.log('Actualizo Details');
         }
         handleGetData();
     });
@@ -61,23 +60,23 @@ export default function CardDetails() {
             const data = await getPlanetById(id);
             setPlanet(data);
 
-            setName(data.name);
-            setDescription(data.description);
-            setMoons(data.moons);
-            setMoon_Names(data.moon_names);
-            setImage(data.image);
+            setName(data.name || '');
+            setDescription(data.description || '');
+            setMoons(data.moons || '');
+            setMoon_Names(data.moon_names || '');
+            setImage(data.image || '');
         };
         getPlanet();
     }, [id]);
 
-    function handlePut(){
+    function handlePut() {
         const updatePlanet = {
             name: name,
             description: description,
             moons: moons,
-            moon_names: moon_names,
+            // moon_names: moon_names,
             image: image,
-          }
+        }
 
         putPlanetById(id, updatePlanet);
         router.navigate(`/`);
@@ -87,69 +86,66 @@ export default function CardDetails() {
         <View>
             {/* VIEW */}
             <View style={{ display: isEdit ? 'none' : 'flex' }}>
-                {planet &&
-                    <View style={styles.card_container}>
-                        <Image source={{ uri: image }} style={styles.image} />
-                        <View style={{ margin: 5 }}>
-                            <Text style={{ fontSize: 20 }}>{name}</Text>
-                            <Text style={{ fontSize: 12 }}>{description}</Text>
-                            <Text style={{ fontSize: 12 }}>Lunas: {moons}</Text>
-                            <Text style={{ fontSize: 12 }}>Nombre de Lunas: {moon_names}</Text>
-                        </View>
+                <View style={styles.card_container}>
+                    <Image source={{ uri: image }} style={styles.image} />
+                    <View style={{ margin: 5 }}>
+                        <Text style={{ fontSize: 20 }}>{name}</Text>
+                        <Text style={{ fontSize: 12 }}>{description}</Text>
+                        <Text style={{ fontSize: 12 }}>Número Lunas: {moons}</Text>
+                        <Text style={{ fontSize: 12 }}>Nombres Lunas: {moon_names}</Text>
                     </View>
-                }
+                </View>
             </View>
 
             {/* EDIT */}
             <View style={{ display: isEdit ? 'flex' : 'none' }}>
-                {planet &&
-                    <View style={styles.card_container}>
-                        <View style={{ margin: 5 }}>
-                            <Text>Nombre</Text>
-                            <TextInput
-                                style={styles.textInput}
-                                onChangeText={setName}
-                                value={name}
-                                placeholder="Ingrese el nombre del planeta...">
-                            </TextInput>
+                <View style={styles.card_container}>
+                    <View style={{ margin: 5 }}>
+                        <Text>Nombre</Text>
+                        <TextInput
+                            style={styles.textInput}
+                            onChangeText={setName}
+                            value={name}
+                            placeholder="Ingrese el nombre del planeta...">
+                        </TextInput>
 
-                            <Text>Descripción</Text>
-                            <TextInput
-                                style={styles.textInput}
-                                onChangeText={setDescription}
-                                value={description}
-                                placeholder="Ingrese la descripción del planeta...">
-                            </TextInput>
+                        <Text>Descripción</Text>
+                        <TextInput
+                            style={styles.textInput}
+                            onChangeText={setDescription}
+                            value={description}
+                            placeholder="Ingrese la descripción del planeta...">
+                        </TextInput>
 
-                            <Text>Lunas (Cantidad)</Text>
-                            <TextInput
-                                style={styles.textInput}
-                                onChangeText={setMoons} value={moons}
-                                placeholder="Ingrese la cantidad de lunas del planeta...">
-                            </TextInput>
+                        <Text>Lunas (Cantidad)</Text>
+                        <TextInput
+                            style={styles.textInput}
+                            onChangeText={setMoons} 
+                            value={moons}
+                            placeholder="Ingrese la cantidad de lunas del planeta...">
+                        </TextInput>
 
-                            <Text>Lunas (Nombres)</Text>
-                            <TextInput
-                                style={styles.textInput}
-                                onChangeText={setMoon_Names}
-                                value={moon_names}
-                                placeholder="Ingrese los nombres de las lunas...">
-                            </TextInput>
+                        {/* <Text>Lunas (Nombres)</Text>
+                        <TextInput
+                            style={styles.textInput}
+                            onChangeText={setMoon_Names}
+                            value={moon_names}
+                            placeholder="Ingrese los nombres de las lunas...">
+                        </TextInput> */}
 
-                            <Text>Imagen:</Text>
-                            <TextInput
-                                style={styles.textInput}
-                                onChangeText={setImage}
-                                value={image}
-                                placeholder="Ingrese la URL de la imagen del planeta...">
-                            </TextInput>
+                        <Text>Imagen:</Text>
+                        <TextInput
+                            style={styles.textInput}
+                            onChangeText={setImage}
+                            value={image}
+                            placeholder="Ingrese la URL de la imagen del planeta...">
+                        </TextInput>
 
-                            <TouchableOpacity style={styles.button} onPress={handlePut}>
-                                <Text>Actualizar</Text>
-                            </TouchableOpacity>
-                        </View>
+                        <TouchableOpacity style={styles.button} onPress={handlePut}>
+                            <Text>Actualizar</Text>
+                        </TouchableOpacity>
                     </View>
-                }
+                </View>
             </View>
         </View>
     );
